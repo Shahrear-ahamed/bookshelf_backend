@@ -4,9 +4,17 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
+    "build": "tsc",
     "lint:fix": "eslint --fix",
+    "start": "node dist/server.js",
+    "prettier:fix": "prettier --write .",
+    "lint-prettier": "yarn lint:check && yarn prettier:check",
+    "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "dev": "ts-node-dev --respawn --transpile-only --ignoe-watch node_modules src/server.ts"
+  },
+  "lint-staged": {
+    "src/**/*.ts": "yarn lint-prettier"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
