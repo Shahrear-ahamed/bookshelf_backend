@@ -5,19 +5,30 @@ import { IUser, UserModel } from './user.interface'
 
 const userSchema = new Schema<IUser>(
   {
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: 0 },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: 0,
+    },
   },
   {
     timestamps: true,
     toJSON: {
       virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.password
+      },
     },
   },
 )
 
 // hash password
-userSchema.pre<IUser>('save', async function (next) {
+userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, Number(config.salt_round))
 
   next()
