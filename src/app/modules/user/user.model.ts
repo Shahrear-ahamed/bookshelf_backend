@@ -27,6 +27,20 @@ const userSchema = new Schema<IUser>(
   },
 )
 
+// statics are use
+userSchema.statics.isUserExist = async function (
+  email: string,
+): Promise<IUser> {
+  return await this.findOne({ email }).select('+password')
+}
+
+userSchema.statics.matchPassword = async function (
+  givenPassword: string,
+  hashedPassword: string,
+): Promise<boolean> {
+  return await bcrypt.compare(givenPassword, hashedPassword)
+}
+
 // hash password
 userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, Number(config.salt_round))

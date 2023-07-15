@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt'
 import httpStatus from 'http-status'
 import config from '../../../config'
 import ApiError from '../../../errors/ApiErrors'
@@ -13,15 +12,13 @@ const authSignUp = async (payload: IUser) => {
 const authLogin = async (payload: IUser) => {
   const { email, password } = payload
 
-  const isExist = await User.findOne({ email }).select('+password')
+  const isUserExist = await User.isUserExist(email)
 
-  console.log(isExist)
-
-  if (!isExist) {
+  if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found', '')
   }
 
-  const passMatch = await bcrypt.compare(password, isExist.password)
+  const passMatch = await User.matchPassword(password, isUserExist.password)
 
   if (!passMatch) {
     throw new ApiError(
@@ -32,7 +29,7 @@ const authLogin = async (payload: IUser) => {
   }
 
   const userDetails = {
-    email: isExist.email,
+    email: isUserExist.email,
   }
 
   const accessToken = await JwtHelpers.createToken(

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model } from 'mongoose'
 
 export type IUser = {
@@ -5,4 +6,7 @@ export type IUser = {
   password: string
 }
 
-export type UserModel = Model<IUser>
+export type UserModel = {
+  isUserExist(email: string): Promise<IUser>
+  matchPassword(givenPass: string, hashedPassword: string): Promise<boolean>
+} & Model<IUser>
