@@ -67,7 +67,12 @@ const getAllBooks = async (
   }
 }
 
+const getMyBooks = async (email: string): Promise<IBook[]> => {
+  return await Book.find({ publisher: email })
+}
+
 export const BookService = {
   createBook,
   getAllBooks,
+  getMyBooks,
 }

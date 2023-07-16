@@ -36,7 +36,21 @@ const getAllBooks = catchAsync(async (req, res) => {
   })
 })
 
+const getMyBooks = catchAsync(async (req, res) => {
+  const userEmail = req.user?.email
+
+  const result = await BookService.getMyBooks(userEmail)
+
+  sendResponse<IBook[]>(res, {
+    statusCode: httpStatus.OK,
+    status: true,
+    message: 'Book retrieve successfully',
+    data: result,
+  })
+})
+
 export const BookController = {
   createBook,
   getAllBooks,
+  getMyBooks,
 }

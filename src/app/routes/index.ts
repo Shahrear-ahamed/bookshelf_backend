@@ -10,7 +10,7 @@ const routerModules = [
     route: AuthRoutes,
   },
   {
-    path: '/book',
+    path: '/books',
     route: bookRoutes,
   },
 ]
