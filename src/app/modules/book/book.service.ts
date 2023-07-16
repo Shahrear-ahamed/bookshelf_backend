@@ -1,3 +1,5 @@
+import { SortOrder } from 'mongoose'
+import { calculatePagination } from '../../../helpers/paginationHelper'
 import { IPagination } from '../../../interfaces/pagination'
 import { bookSearchableField } from './book.constant'
 import { IBook, IBookFilterableFields } from './book.interface'
@@ -12,7 +14,6 @@ const getAllBooks = async (
   paginationData: IPagination,
 ) => {
   const { searchTerm, ...otherFilters } = filterData
-  console.log(searchTerm, otherFilters, paginationData)
 
   const condition = []
 
@@ -35,19 +36,32 @@ const getAllBooks = async (
   }
 
   // implement dynamic pagination here
+  const { page, skip, limit, sortBy, sortOrder } =
+    calculatePagination(paginationData)
+
+  // sort condition
+  const sortCondition: { [key: string]: SortOrder } = {}
+
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder
+  }
 
   // where condition for
   const whereCondition = condition.length ? { $and: condition } : {}
 
   const result = await Book.find(whereCondition)
-    .sort({ createdAt: -1 })
-    .skip(0)
-    .limit(10)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit)
+
+  // total count
+  const total = await Book.countDocuments(whereCondition)
+
   return {
     meta: {
-      page: 0,
-      total: 10,
-      limit: 10,
+      page,
+      total,
+      limit,
     },
     data: result,
   }
