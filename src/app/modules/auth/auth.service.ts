@@ -6,7 +6,19 @@ import { IUser } from '../user/user.interface'
 import User from '../user/user.model'
 
 const authSignUp = async (payload: IUser) => {
-  return await User.create(payload)
+  const user = await User.create(payload)
+
+  const userDetails = {
+    email: user.email,
+  }
+
+  const accessToken = await JwtHelpers.createToken(
+    userDetails,
+    config.jwt_secret as string,
+    config.jwt_expired as string,
+  )
+
+  return { ...userDetails, accessToken }
 }
 
 const authLogin = async (payload: IUser) => {
@@ -44,7 +56,7 @@ const authLogin = async (payload: IUser) => {
     config.jwt_refresh_expired as string,
   )
 
-  return { accessToken, refreshToken }
+  return { ...userDetails, accessToken, refreshToken }
 }
 
 export const AuthService = {
