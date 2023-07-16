@@ -1,4 +1,6 @@
+import httpStatus from 'http-status'
 import { SortOrder } from 'mongoose'
+import ApiError from '../../../errors/ApiErrors'
 import { calculatePagination } from '../../../helpers/paginationHelper'
 import { IPagination } from '../../../interfaces/pagination'
 import { bookSearchableField } from './book.constant'
@@ -75,9 +77,23 @@ const getSingleBook = async (bookId: string): Promise<IBook | null> => {
   return await Book.findById(bookId)
 }
 
+const editBook = async (
+  id: string,
+  payload: Partial<IBook>,
+): Promise<IBook | null> => {
+  const book = await Book.findById(id)
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found', '')
+  }
+
+  return await Book.findByIdAndUpdate({ _id: id }, payload, { new: true })
+}
+
 export const BookService = {
   createBook,
   getAllBooks,
   getMyBooks,
   getSingleBook,
+  editBook,
 }

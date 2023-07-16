@@ -8,11 +8,18 @@ const router = express.Router()
 
 router.post(
   '/add-new-book',
+  auth,
   validateRequest(BookValidation.createBookZodSchema),
   BookController.createBook,
 )
 
-router.get('/my-books/', auth, BookController.getMyBooks)
+router.get('/my-books', auth, BookController.getMyBooks)
+router.put(
+  '/:id',
+  auth,
+  validateRequest(BookValidation.editBookZodSchema),
+  BookController.editBook,
+)
 
 router.get('/:id', BookController.getSingleBook)
 router.get('/', BookController.getAllBooks)

@@ -12,6 +12,21 @@ const createBookZodSchema = z.object({
   }),
 })
 
+const editBookZodSchema = z.object({
+  body: z.object({
+    title: z.string({ required_error: 'Title is required' }).optional(),
+    author: z.string({ required_error: 'Author is required' }).optional(),
+    genre: z.string({ required_error: 'Genre is required' }).optional(),
+    publicationDate: z
+      .number({
+        required_error: 'Publication date is required',
+      })
+      .optional(),
+    publisher: z.string({ required_error: 'Publisher is required' }).optional(),
+  }),
+})
+
 export const BookValidation = {
   createBookZodSchema,
+  editBookZodSchema,
 }
