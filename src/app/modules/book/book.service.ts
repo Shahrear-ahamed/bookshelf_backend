@@ -71,8 +71,13 @@ const getMyBooks = async (email: string): Promise<IBook[]> => {
   return await Book.find({ publisher: email })
 }
 
+const getSingleBook = async (bookId: string): Promise<IBook | null> => {
+  return await Book.findById(bookId)
+}
+
 export const BookService = {
   createBook,
   getAllBooks,
   getMyBooks,
+  getSingleBook,
 }

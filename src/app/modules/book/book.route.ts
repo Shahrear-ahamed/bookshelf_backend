@@ -14,6 +14,7 @@ router.post(
 
 router.get('/my-books/', auth, BookController.getMyBooks)
 
+router.get('/:id', BookController.getSingleBook)
 router.get('/', BookController.getAllBooks)
 
 export const bookRoutes = router
