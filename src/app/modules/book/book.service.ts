@@ -77,7 +77,7 @@ const getSingleBook = async (bookId: string): Promise<IBook | null> => {
   return await Book.findById(bookId)
 }
 
-const editBook = async (
+const updateBook = async (
   id: string,
   payload: Partial<IBook>,
 ): Promise<IBook | null> => {
@@ -90,10 +90,15 @@ const editBook = async (
   return await Book.findByIdAndUpdate({ _id: id }, payload, { new: true })
 }
 
+const deleteBook = async (id: string): Promise<IBook | null> => {
+  return await Book.findByIdAndDelete(id)
+}
+
 export const BookService = {
   createBook,
   getAllBooks,
   getMyBooks,
   getSingleBook,
-  editBook,
+  updateBook,
+  deleteBook,
 }

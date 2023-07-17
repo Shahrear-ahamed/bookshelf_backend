@@ -4,8 +4,9 @@ export type IBook = {
   title: string
   author: string
   genre: string
-  publicationDate: number
   publisher: string
+  publicationDate: number
+  reviews: string[]
 }
 
 export type IBookFilterableFields = {

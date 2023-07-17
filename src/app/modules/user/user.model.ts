@@ -15,6 +15,18 @@ const userSchema = new Schema<IUser>(
       required: true,
       select: 0,
     },
+    wishlist: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Book',
+    },
+    currentlyReading: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Book',
+    },
+    finishedReading: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Book',
+    },
   },
   {
     timestamps: true,

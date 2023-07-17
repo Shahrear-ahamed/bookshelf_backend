@@ -17,11 +17,13 @@ router.get('/my-books', auth, BookController.getMyBooks)
 router.put(
   '/:id',
   auth,
-  validateRequest(BookValidation.editBookZodSchema),
-  BookController.editBook,
+  validateRequest(BookValidation.updateBookZodSchema),
+  BookController.updateBook,
 )
+
+router.delete('/:id', auth, BookController.deleteBook)
 
 router.get('/:id', BookController.getSingleBook)
 router.get('/', BookController.getAllBooks)
 
-export const bookRoutes = router
+export const BookRoutes = router
