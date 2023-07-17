@@ -71,14 +71,17 @@ const finishedReading = async (email: string, payload: IReadingList) => {
   const isBookExist = isUserExist.readingList.find(
     book => book.book.toString() === id.toString(),
   )
-  console.log(isBookExist)
 
   if (!isBookExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Book not found', '')
   }
 
   if (isBookExist && isBookExist.status === status) {
-    throw new ApiError(httpStatus.CONFLICT, 'Book already finished', '')
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      'Book already marked as finished',
+      '',
+    )
   }
 
   return await User.findOneAndUpdate(

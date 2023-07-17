@@ -38,8 +38,7 @@ const getAllBooks = async (
   }
 
   // implement dynamic pagination here
-  const { page, skip, limit, sortBy, sortOrder } =
-    calculatePagination(paginationData)
+  const { skip, limit, sortBy, sortOrder } = calculatePagination(paginationData)
 
   // sort condition
   const sortCondition: { [key: string]: SortOrder } = {}
@@ -56,17 +55,7 @@ const getAllBooks = async (
     .skip(skip)
     .limit(limit)
 
-  // total count
-  const total = await Book.countDocuments(whereCondition)
-
-  return {
-    meta: {
-      page,
-      total,
-      limit,
-    },
-    data: result,
-  }
+  return result
 }
 
 const getMyBooks = async (email: string): Promise<IBook[]> => {

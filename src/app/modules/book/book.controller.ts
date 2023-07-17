@@ -31,8 +31,7 @@ const getAllBooks = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     status: true,
     message: 'Book retrieve successfully',
-    meta: result.meta,
-    data: result.data,
+    data: result,
   })
 })
 
