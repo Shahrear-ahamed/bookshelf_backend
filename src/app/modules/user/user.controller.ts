@@ -12,11 +12,26 @@ const addWishlist = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     status: true,
-    message: 'Add wishlist successfully',
+    message: 'Add book in wishlist successfully',
+    data: result,
+  })
+})
+
+const addReadingList = catchAsync(async (req, res) => {
+  const bookData = req.body
+  const user = req.user
+
+  const result = await UserService.addReadingList(user?.email, bookData)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    status: true,
+    message: 'Add book in reading list successfully',
     data: result,
   })
 })
 
 export const UserController = {
   addWishlist,
+  addReadingList,
 }

@@ -89,6 +89,20 @@ const deleteBook = catchAsync(async (req, res) => {
   })
 })
 
+const reviewBook = catchAsync(async (req, res) => {
+  const bookId = req.params.id
+  const reviewData = req.body?.review
+
+  const result = await BookService.reviewBook(bookId, reviewData)
+
+  sendResponse<IBook>(res, {
+    statusCode: httpStatus.OK,
+    status: true,
+    message: 'Book review added successfully',
+    data: result,
+  })
+})
+
 export const BookController = {
   createBook,
   getAllBooks,
@@ -96,4 +110,5 @@ export const BookController = {
   getSingleBook,
   updateBook,
   deleteBook,
+  reviewBook,
 }

@@ -94,6 +94,23 @@ const deleteBook = async (id: string): Promise<IBook | null> => {
   return await Book.findByIdAndDelete(id)
 }
 
+const reviewBook = async (
+  id: string,
+  payload: string,
+): Promise<IBook | null> => {
+  const isExist = await Book.findOne({ _id: id })
+
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found', '')
+  }
+
+  return await Book.findByIdAndUpdate(
+    { _id: id },
+    { $push: { reviews: payload } },
+    { new: true },
+  )
+}
+
 export const BookService = {
   createBook,
   getAllBooks,
@@ -101,4 +118,5 @@ export const BookService = {
   getSingleBook,
   updateBook,
   deleteBook,
+  reviewBook,
 }

@@ -19,13 +19,20 @@ const userSchema = new Schema<IUser>(
       type: [Schema.Types.ObjectId],
       ref: 'Book',
     },
-    currentlyReading: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Book',
-    },
-    finishedReading: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Book',
+    readingList: {
+      type: [
+        {
+          bookId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Book',
+          },
+          status: {
+            type: String,
+            enum: ['reading', 'finished'],
+            default: 'reading',
+          },
+        },
+      ],
     },
   },
   {

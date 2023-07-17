@@ -21,6 +21,13 @@ router.put(
   BookController.updateBook,
 )
 
+router.put(
+  '/review/:id',
+  auth,
+  validateRequest(BookValidation.reviewBookZodSchema),
+  BookController.reviewBook,
+)
+
 router.delete('/:id', auth, BookController.deleteBook)
 
 router.get('/:id', BookController.getSingleBook)

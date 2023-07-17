@@ -26,7 +26,14 @@ const updateBookZodSchema = z.object({
   }),
 })
 
+const reviewBookZodSchema = z.object({
+  body: z.object({
+    review: z.string({ required_error: 'Review must required' }),
+  }),
+})
+
 export const BookValidation = {
   createBookZodSchema,
   updateBookZodSchema,
+  reviewBookZodSchema,
 }
