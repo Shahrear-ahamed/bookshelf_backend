@@ -2,7 +2,7 @@
 import { Model, Types } from 'mongoose'
 
 export type IReadingList = {
-  bookId: Types.ObjectId
+  book: Types.ObjectId
   status: string
 }
 

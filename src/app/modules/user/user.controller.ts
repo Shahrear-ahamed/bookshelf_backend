@@ -17,6 +17,19 @@ const addWishlist = catchAsync(async (req, res) => {
   })
 })
 
+const getReadingList = catchAsync(async (req, res) => {
+  const user = req.user
+
+  const result = await UserService.getReadingList(user?.email)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    status: true,
+    message: 'Get reading list successfully',
+    data: result,
+  })
+})
+
 const addReadingList = catchAsync(async (req, res) => {
   const bookData = req.body
   const user = req.user
@@ -31,7 +44,23 @@ const addReadingList = catchAsync(async (req, res) => {
   })
 })
 
+const finishedReading = catchAsync(async (req, res) => {
+  const bookData = req.body
+  const user = req.user
+
+  const result = await UserService.finishedReading(user?.email, bookData)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    status: true,
+    message: 'Finished reading book successfully',
+    data: result,
+  })
+})
+
 export const UserController = {
   addWishlist,
   addReadingList,
+  getReadingList,
+  finishedReading,
 }

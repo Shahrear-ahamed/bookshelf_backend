@@ -22,7 +22,7 @@ const userSchema = new Schema<IUser>(
     readingList: {
       type: [
         {
-          bookId: {
+          book: {
             type: Schema.Types.ObjectId,
             ref: 'Book',
           },

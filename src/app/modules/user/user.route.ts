@@ -12,8 +12,17 @@ router.put('/add-wishlist', auth, UserController.addWishlist)
 router.put(
   '/reading-list',
   auth,
-  validateRequest(UserValidation.userAddReadingZodSchema),
+  validateRequest(UserValidation.userReadingZodSchema),
   UserController.addReadingList,
 )
+
+router.put(
+  '/reading-list/finished',
+  auth,
+  validateRequest(UserValidation.userReadingZodSchema),
+  UserController.finishedReading,
+)
+
+router.get('/reading-list', auth, UserController.getReadingList)
 
 export const UserRoutes = router

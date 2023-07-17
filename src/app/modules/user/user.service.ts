@@ -24,10 +24,17 @@ const addWishlist = async (email: string, bookId: string) => {
   )
 }
 
+const getReadingList = async (email: string) => {
+  const user = await User.findOne({ email })
+    .select('-password -email -createdAt -updatedAt -wishlist')
+    .populate('readingList.book', '-reviews -createdAt -updatedAt -__v')
+
+  return user?.readingList
+}
+
 const addReadingList = async (email: string, payload: IReadingList) => {
-  const { bookId, status } = payload
-  const id = new mongoose.Types.ObjectId(bookId)
-  const bookData = { bookId: id, status }
+  const { book: id, status } = payload
+  const bookData = { book: id, status }
 
   const isUserExist = await User.findOne({ email })
 
@@ -37,11 +44,10 @@ const addReadingList = async (email: string, payload: IReadingList) => {
 
   // check if bookId is already in reading list
   const isBookExist = isUserExist.readingList.find(
-    book => book.bookId.toString() === id.toString(),
+    book => book.book.toString() === id.toString(),
   )
-  console.log(isBookExist)
 
-  if (isBookExist) {
+  if (isBookExist && isBookExist.status === status) {
     throw new ApiError(httpStatus.CONFLICT, 'Book already in reading list', '')
   }
 
@@ -52,7 +58,39 @@ const addReadingList = async (email: string, payload: IReadingList) => {
   )
 }
 
+const finishedReading = async (email: string, payload: IReadingList) => {
+  const { book: id, status } = payload
+
+  const isUserExist = await User.findOne({ email })
+
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found', '')
+  }
+
+  // check if bookId is already in reading list
+  const isBookExist = isUserExist.readingList.find(
+    book => book.book.toString() === id.toString(),
+  )
+  console.log(isBookExist)
+
+  if (!isBookExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found', '')
+  }
+
+  if (isBookExist && isBookExist.status === status) {
+    throw new ApiError(httpStatus.CONFLICT, 'Book already finished', '')
+  }
+
+  return await User.findOneAndUpdate(
+    { email, 'readingList.book': id },
+    { $set: { 'readingList.$.status': status } },
+    { new: true },
+  )
+}
+
 export const UserService = {
   addWishlist,
+  getReadingList,
   addReadingList,
+  finishedReading,
 }
